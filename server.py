@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import os
 import zipfile
 
@@ -30,8 +30,21 @@ def upload():
 
         # 删除上传的压缩包文件
         os.remove(file.filename)
-
-        return 'File uploaded and processed successfully', 200
+        # 得到一个搜索结果列表
+        """
+        data_list = [
+            {'filename1': {line_number1: 'content1', line_number2: 'content2'}},
+            {'filename2': {line_number1: 'content1', line_number2: 'content2'}},
+            {'filename3': {line_number1: 'content1', line_number2: 'content2'}}
+        ]
+        """
+        data_list = [
+            {'filename1': {"line_number1": 'content1', "line_number2": 'content2'}},
+            {'filename2': {"line_number1": 'content1', "line_number2": 'content2'}},
+            {'filename3': {"line_number1": 'content1', "line_number2": 'content2'}}
+        ]
+        return jsonify(data_list),200
+        # return 'File uploaded and processed successfully', 200
 
     return 'Error uploading file', 500
 

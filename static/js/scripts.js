@@ -1,50 +1,49 @@
-function downloadSelected() {
-    // 获取选中的文件列表
-    var selectedFiles = getSelectedFiles();
-  
-    // 循环遍历选中的文件，并进行下载操作
-    selectedFiles.forEach(function(file) {
-      // 使用服务端接口下载文件
-      // 这里需要调用你的服务端接口，并传递文件名或其他标识符
-      // 例如，可以使用 AJAX 请求或创建隐藏的 <a> 元素进行下载
-      // 下面是一个简单的示例，使用隐藏的 <a> 元素进行下载
-      var link = document.createElement('a');
-      link.href = 'http://yourserver.com/download?file=' + file;
-      link.download = file;
-      link.click();
+  // 用于渲染返回的数据
+  function renderData(data) {
+    const container = document.getElementById('data-container');
+    data.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.id = `data-item-${index}`;
+      const checkbox = document.createElement('input');
+      checkbox.setAttribute('type', 'checkbox');
+      checkbox.id = `checkbox-${index}`;
+      div.appendChild(checkbox);
+      Object.keys(item).forEach(key => {
+        const innerDiv = document.createElement('div');
+        innerDiv.textContent = `${key}: ${JSON.stringify(item[key])}`;
+        div.appendChild(innerDiv);
+      });
+      container.appendChild(div);
     });
+    const downloadButton = document.createElement('button');
+    downloadButton.id = 'download-button';
+    const textContent = document.createTextNode('下载');
+    downloadButton.appendChild(textContent);
+    container.appendChild(downloadButton);
+    downloadBtn = document.getElementById('download-button');
+    downloadBtn.addEventListener('click', downloadData);
   }
-  
-  function downloadAll() {
-    // 获取全部文件列表
-    var allFiles = getAllFiles();
-  
-    // 循环遍历全部文件，并进行下载操作
-    allFiles.forEach(function(file) {
-      // 使用服务端接口下载文件
-      // 这里需要调用你的服务端接口，并传递文件名或其他标识符
-      // 例如，可以使用 AJAX 请求或创建隐藏的 <a> 元素进行下载
-      // 下面是一个简单的示例，使用隐藏的 <a> 元素进行下载
-      var link = document.createElement('a');
-      link.href = 'http://yourserver.com/download?file=' + file;
-      link.download = file;
-      link.click();
+
+  //用于下载选中数据
+  function downloadData() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const selectedData = [];
+    checkboxes.forEach((checkbox, index) => {
+      if (checkbox.checked) {
+        const div = document.getElementById(`data-item-${index}`);
+        const data = div.textContent.split(': ')[1].trim();
+        selectedData.push(data);
+      }
     });
+    const csv = selectedData.join(',\n');
+    const blob = new Blob([csv]);
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = 'data.csv';
+    link.href = href;
+    link.click();
   }
-  
-  // 这里的 getSelectedFiles() 和 getAllFiles() 函数是用于获取选中的文件列表和全部文件列表的示例函数
-  // 你需要根据你的实际情况实现这两个函数，从服务端获取文件列表数据
-  function getSelectedFiles() {
-    // 返回选中的文件列表
-    // 例如，你可以遍历文件列表区域的元素，检查哪些文件被选中，并将它们加入到一个数组中
-    // 返回包含选中文件的数组
-  }
-  
-  function getAllFiles() {
-    // 返回全部文件列表
-    // 例如，你可以直接从服务端获取全部文件列表数据，并返回该数据
-    // 返回包含全部文件的数组
-  }
+
   //用于上传文件夹
   function uploadFolder() {
     var inputElement = document.getElementById("folderInput");
@@ -76,6 +75,9 @@ function downloadSelected() {
           if (xhr.status === 200) {
             console.log("文件上传成功");
             // 在此处进行上传成功后的操作
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+            renderData(response);
           } else {
             console.log("文件上传失败");
             // 在此处进行上传失败后的操作
@@ -84,4 +86,7 @@ function downloadSelected() {
       });
     }
   }
-  
+  function init(){
+    // 初始化函数体
+  }
+  init();
