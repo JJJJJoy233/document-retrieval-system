@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>文件管理页面</title>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</head>
+<body>
+  <h1>文件管理</h1>
+  <input type="file" id="folderInput" webkitdirectory directory multiple>
+  <button onclick="uploadFolder()">上传文件夹</button>
+
+  <div id="data-container">
+    <!-- 这里将显示从服务端返回的文件列表 -->
+  </div>
+
+  <div id="controls">
+    <button onclick="downloadSelected()">保存选定</button>
+    <button onclick="downloadAll()">保存全部</button>
+  </div>
+
+</body>
+</html>
