@@ -64,6 +64,7 @@
         // 创建 FormData 对象，用于将文件发送到服务器
         var formData = new FormData();
         formData.append("file", content, "folder.zip");
+        
         console.log(formData);
         // 使用 AJAX 进行文件上传
         var xhr = new XMLHttpRequest();
@@ -75,9 +76,6 @@
           if (xhr.status === 200) {
             console.log("文件上传成功");
             // 在此处进行上传成功后的操作
-            const response = JSON.parse(xhr.responseText);
-            console.log(response);
-            renderData(response);
           } else {
             console.log("文件上传失败");
             // 在此处进行上传失败后的操作
@@ -86,6 +84,30 @@
       });
     }
   }
+  function search() {
+    const searchInput = document.getElementById('search-input');
+    const keyword = searchInput.value;
+  
+    const xhr = new XMLHttpRequest();
+    const url = 'search';
+    const params = `keyword=${encodeURIComponent(keyword)}`;
+    xhr.open('GET', `${url}?${params}`);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          console.log('搜索成功');
+          // 在这里处理搜索成功后的结果
+          response = JSON.parse(xhr.responseText);
+          renderData(response);
+        } else {
+          console.error('搜索失败');
+          // 在这里处理搜索失败的情况
+        }
+      }
+    };
+    xhr.send();
+  }
+
   function init(){
     // 初始化函数体
   }

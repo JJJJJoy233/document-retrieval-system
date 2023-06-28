@@ -30,23 +30,25 @@ def upload():
 
         # 删除上传的压缩包文件
         os.remove(file.filename)
-        # 得到一个搜索结果列表
-        """
-        data_list = [
-            {'filename1': {line_number1: 'content1', line_number2: 'content2'}},
-            {'filename2': {line_number1: 'content1', line_number2: 'content2'}},
-            {'filename3': {line_number1: 'content1', line_number2: 'content2'}}
-        ]
-        """
-        data_list = [
+        
+        # return 'File uploaded and processed successfully', 200
+
+    return 'Error uploading file', 500
+
+@app.route('/search', methods=['GET'])
+def search():
+    keyword = request.args.get('keyword')
+    # 对上传上来的文件进行索引和检索
+    
+    
+    # 得到一个搜索结果列表
+    data_list = [
             {'filename1': {"line_number1": 'content1', "line_number2": 'content2'}},
             {'filename2': {"line_number1": 'content1', "line_number2": 'content2'}},
             {'filename3': {"line_number1": 'content1', "line_number2": 'content2'}}
         ]
-        return jsonify(data_list),200
-        # return 'File uploaded and processed successfully', 200
-
-    return 'Error uploading file', 500
+    return jsonify(data_list), 200
+    
 
 if __name__ == '__main__':
     app.run(port=8888,debug=True)
