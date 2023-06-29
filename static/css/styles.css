@@ -1,0 +1,22 @@
+.drive {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.drive.selected {
+    color: red;
+}
+
+.folder {
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.folder.selected {
+    color: blue;
+}
+.highlighted {
+    background-color: yellow;
+    font-weight: bold;
+    color: red;
+}

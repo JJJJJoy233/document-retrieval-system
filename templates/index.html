@@ -1,28 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>文件管理页面</title>
-  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css') }}">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <title>File Search App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-  <h1>文件管理</h1>
-  <input type="file" id="folderInput" webkitdirectory directory multiple>
-  <button onclick="uploadFolder()">上传文件夹</button>
-  </br>
-  <input type="text" id="search-input">
-  <button onclick="search()">搜索</button>
+    <h1>File Search App</h1>
+    <div id="drives-container">
+        <h2>Select a drive:</h2>
+        <div id="drives-list">
+            {% for drive in drives %}
+                <div class="drive{{ ' selected' if selected_drive == drive.drive }}" data-path="{{ drive.drive }}">{{ drive.drive }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="folders-container">
+        <h2>Select a folder:</h2>
+        <div id="folders-list">
+            {% if selected_drive %}
+                {% if selected_folder %}
+                    <div class="folder" data-path="{{ selected_drive }}{{ '\\' if selected_drive[-1] != '\\' else '' }}">{{ '..' }}</div>
+                {% endif %}
+                {% for folder in folders %}
+                    <div class="folder{{ ' selected' if selected_folder == folder }}" data-path="{{ selected_drive }}{{ '\\' if selected_drive[-1] != '\\' else '' }}{{ folder }}">{{ folder }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div id="search-container">
+        <h2>Enter a keyword:</h2>
+        <form id="search-form" method="POST" action="/">
+            <input type="text" name="keyword" id="keyword" required value="{{ keyword }}">
+            <input type="hidden" name="drive" id="drive" value="{{ selected_drive }}">
+            <input type="hidden" name="folder" id="folder" value="{{ selected_folder }}">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <button id="save-button">保存</button>
 
-
-  <div id="data-container">
-    <!-- 这里将显示从服务端返回的文件列表 -->
-  </div>
-
-  <div id="controls">
-    <button onclick="downloadSelected()">保存选定</button>
-    <button onclick="downloadAll()">保存全部</button>
-  </div>
-
+    <div id="results-container" class="results-container">
+        <!--{% if results %}
+            <h2>Search results:</h2>
+            {% for result in results %}
+                <div class="result">
+                    <p class="file-path">{{ result.file_path }}</p>
+                    {% for line in result.lines %}
+                        <div class="line">
+                            <p class="line-number">{{ line.line_number }}</p>
+                            <p class="line-content">{{ line.line_content }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <hr>
+            {% endfor %}
+        {% endif %} -->
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
