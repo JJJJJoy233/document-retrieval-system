@@ -39,6 +39,7 @@ foldersContainer.addEventListener("click", function(e) {
       // 更新隐藏字段的值
       document.getElementById("folder").value = folderPath;
 
+
       // 加载子文件夹列表
       loadFolders(folderPath);
   }
@@ -95,9 +96,9 @@ function renderResults(data) {
 
             var ln = parseInt(lineNumber) + 1;
 
-            checkbox.value = fileData.file_path + ':' + ln; // 设置复选框的值为 文件路径:行号
-            line.id = fileData.file_path + ':' + ln; // 设置行号的 id 层次;
-            line.textContent = '行号 ' + ln + ': ' + lineContent;
+            checkbox.value = fileData.file_path + '@' + ln; // 设置复选框的值为 文件路径:行号
+            line.id = fileData.file_path + '@' + ln; // 设置行号的 id 层次;
+            line.textContent = '行号 ' + ln + ':' + lineContent;
             keyword = document.getElementById("keyword").value;
             console.log(keyword);
             line.innerHTML = highlightKeyword(line.innerHTML, keyword); // 调用高亮关键字的函数
@@ -132,14 +133,17 @@ function downloadResults(selectedResults) {
   var downloadData = {};
   console.log(selectedResults);
   selectedResults.forEach(function(result) {
-      var [filePath, lineNumber] = result.split(':');
+    console.log(result);
+      var [filePath, lineNumber] = result.split('@');
+      console.log(filePath, lineNumber);
       if (!downloadData[filePath]) {
           downloadData[filePath] = {};
       }
       downloadData[filePath][lineNumber] = document.getElementById(result).textContent;
       console.log(downloadData[filePath][lineNumber]);
+      console.log(downloadData);
   });
-
+  console.log(downloadData);
   // 将数据转换为JSON格式
   var jsonData = JSON.stringify(downloadData);
 
@@ -188,6 +192,9 @@ function downloadResults(selectedResults) {
                   folder.innerHTML = folders[i];
                   foldersContainer.appendChild(folder);
               }
+              const currentFolderElement = document.getElementById("current-folder");
+              console.log(folderPath);
+              currentFolderElement.textContent = folderPath;
           }
       };
       xhr.open("GET", "/get_folders?path=" + encodeURIComponent(folderPath), true);
