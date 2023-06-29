@@ -128,10 +128,31 @@ document.getElementById('save-button').addEventListener('click', function() {
   }
 });
 
+
+document.getElementById('comfirm-button').addEventListener('click', function() {
+    folderPath = document.getElementById("current-folder").textContent;
+    // 构建要发送的数据对象
+    var data = { "folder": folderPath };
+    const fd = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+        fd.append(key, value);
+      });
+    console.log(fd);
+    fetch('/makeIndex', {
+      method: 'POST',
+      body: fd
+    })
+    .then(function(response) {
+        console.log(response);
+    })
+    .catch(function(error) {
+        console.log('Error:', error);
+    });
+});
+
 function downloadResults(selectedResults) {
   // 创建一个包含选中结果的数据对象
   var downloadData = {};
-  console.log(selectedResults);
   selectedResults.forEach(function(result) {
     console.log(result);
       var [filePath, lineNumber] = result.split('@');

@@ -110,12 +110,8 @@ def index():
         keyword = request.form['keyword']
         drive = request.form['drive']
         folder = request.form['folder']
-        print(drive, folder, keyword)
         build_index(folder)
         results = search_index(keyword)
-        for result in results:
-            print(result)
-            print()
         return (results, 200);
     else:
         drives = [{'drive': drive} for drive in get_drives()]
@@ -141,11 +137,18 @@ def get_folders():
 def search():
     keyword = request.form['keyword']
     folder = request.form['folder']
-    create_database()
-    build_index(folder)
+    # create_database()
+    # build_index(folder)
     results = search_index(keyword)
     return jsonify(results)
 
+# 有必要的话 选中文件夹时就索引
+@app.route('/makeIndex', methods=['POST'])
+def makeIndex():
+    folder = request.form["folder"]
+    create_database()
+    build_index(folder)
+    return jsonify({"success": 200})
 
 if __name__ == '__main__':
     app.run(debug=True)
